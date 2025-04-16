@@ -11,8 +11,8 @@ const Calendar = () => {
     const [loading, setLoading] = useState(true);
     
     useEffect(() => {
-      const token = localStorage.getItem('token');
-      const storedUser = localStorage.getItem('user');
+      const token = sessionstorage.getItem('token');
+      const storedUser = sessionstorage.getItem('user');
     
       if (!token) {
         navigate('/login');
@@ -54,7 +54,7 @@ const Calendar = () => {
         }
     
         setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
+        sessionstorage.setItem('user', JSON.stringify(userData));
       } catch (error) {
         console.error('Failed to fetch user data:', error);
         navigate('/login');

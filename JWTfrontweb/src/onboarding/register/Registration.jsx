@@ -51,8 +51,8 @@ const Registration = () => {
   const [error, setError] = useState(null); // Added for error handling
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
+    const token = sessionstorage.getItem('token');
+    const storedUser = sessionstoragege.getItem('user');
     handleAuthToken(token, storedUser ? JSON.parse(storedUser) : null, navigate);
     if (!token) {
       setLoading(false);
@@ -88,7 +88,7 @@ const Registration = () => {
       }
 
       setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
+      sessionstoragege.setItem('user', JSON.stringify(userData));
     } catch (error) {
       console.error('Failed to fetch user data:', error);
       navigate('/login');
@@ -224,7 +224,7 @@ const Registration = () => {
     };
 
     //token
-    const token = localStorage.getItem('token');
+    const token = sessionstorage.getItem('token');
 
     try {
       const response = await axios.post(`${apiUrl}/registration`, registrationData, {
@@ -233,7 +233,7 @@ const Registration = () => {
 
       if (response.status === 200) {
         if (response.data.user) {
-          localStorage.setItem('user', JSON.stringify(response.data.user));
+          sessionstorage.setItem('user', JSON.stringify(response.data.user));
           setUser(response.data.user);
         }
         alert('Registered successfully!');
@@ -251,8 +251,8 @@ const Registration = () => {
     }
   };
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
+    const token = sessionstorage.getItem('token');
+    const storedUser = sessionstorage.getItem('user');
     handleAuthToken(token, storedUser ? JSON.parse(storedUser) : null, navigate);
   
     if (!token) {

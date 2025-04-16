@@ -13,13 +13,13 @@ export const handleAuthToken = (token, user, navigate) => {
     const timeLeft = exp - now;
 
     if (timeLeft <= 0) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      sessionstoragege.removeItem('token');
+      sessionstorage.removeItem('user');
       navigate('/login');
     } else {
       setTimeout(() => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        sessionstorage.removeItem('token');
+        sessionstorage.removeItem('user');
         navigate('/login');
       }, timeLeft);
     }

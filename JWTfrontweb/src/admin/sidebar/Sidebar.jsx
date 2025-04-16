@@ -20,7 +20,7 @@ const Sidebar = () => {
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
   const handleLogout = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionstoragege.getItem('token');
       console.log(import.meta.env.VITE_API_BASE_URL);
 
       if (!token) {
@@ -35,13 +35,13 @@ const Sidebar = () => {
         },
       });
 
-      localStorage.removeItem('token'); // Clear token
-      localStorage.removeItem('user'); // Clear user data
+      sessionstorage.removeItem('token'); // Clear token
+      sessionstorage.removeItem('user'); // Clear user data
       navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      sessionstorage.removeItem('token');
+      sessionstorage.removeItem('user');
       navigate('/');
     }
   };

@@ -23,7 +23,7 @@ const Login = () => {
     try {
       // Step 1: Send login request with email and password
       console.log('Sending login request:'); // Debug payload
-      const response = await axios.post(`${apiUrl}/login`, { email, password });
+      const response = await axios.post(`${apiUrl}/login`, { email, password , remember: rememberMe,});
   
       // Step 2: Check for token and user data
       if (response.data.status && response.data.token) {
@@ -32,9 +32,9 @@ const Login = () => {
           response.data.user.role = 'admin'; // Assign 'admin' role to this user
         }
   
-        // Store token and user data in localStorage
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        // Store token and user data in sessionstoragege
+        sessionstorage.setItem('token', response.data.token);
+        sessionstorage.setItem('user', JSON.stringify(response.data.user));
         console.log('Login successful:', response.data.message);
   
         // Conditionally navigate based on role and region
@@ -118,7 +118,10 @@ const Login = () => {
               </div>
               <div className="login-right-options">
                 <div className="login-right-options-remember">
-                  <input type="checkbox" id="remember-checkbox-id" name="remember-checkbox" />
+                  <input type="checkbox" id="remember-checkbox-id" 
+                  name="remember-checkbox" 
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)} />
                   <label htmlFor="remember-checkbox-id">Remember me</label>
                 </div>
                 <div className="login-right-options-forgot">

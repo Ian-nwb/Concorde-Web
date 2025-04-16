@@ -55,6 +55,15 @@ class AuthController extends Controller
     }
     public function login(Request $request)
 {
+    $remember = $request->has('remember');
+
+    if (Auth::attempt($credentials, $remember)) {
+        return response()->json([
+            'status' => true,
+            'message' => 'Login successful',
+        ]);
+    }
+    
     try {
         // Validation
         $validator = Validator::make($request->all(), [

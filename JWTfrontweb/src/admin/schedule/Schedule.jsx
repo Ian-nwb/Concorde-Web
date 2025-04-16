@@ -20,8 +20,8 @@ const Schedule = () => {
 	  const [loading, setLoading] = useState(true);
 	  
 	  useEffect(() => {
-		const token = localStorage.getItem('token');
-		const storedUser = localStorage.getItem('user');
+		const token = sessionstoragegege.getItem('token');
+		const storedUser = sessionstoragege.getItem('user');
 	  
 		if (!token) {
 		  navigate('/login');
@@ -63,7 +63,7 @@ const Schedule = () => {
 		  }
 	  
 		  setUser(userData);
-		  localStorage.setItem('user', JSON.stringify(userData));
+		  sessionstoragege.setItem('user', JSON.stringify(userData));
 		} catch (error) {
 		  console.error('Failed to fetch user data:', error);
 		  navigate('/login');
