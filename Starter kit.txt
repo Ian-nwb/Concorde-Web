@@ -1,0 +1,31 @@
+git clone --single-branch --branch Easterfixes https://github.com/Ian-nwb/Concorde-Web.git
+cd Concorde-Web
+cd JWTfrontweb 
+npm i
+cd ..
+cd JWTbackweb
+composer i
+git remote remove origin
+
+
+
+import concorde.sql in phpmyadmin from JWTdatabase 
+
+change frontend env to local
+paste this env
+
+#FOR WEB HOSTING php artisan serve --host=0.0.0.0 --port=8000 AND
+#VITE_API_BASE_URL=http://112.203.155.181:8000/api
+
+#FOR LOCAL DEV php artisan serve AND
+VITE_API_BASE_URL=http://127.0.0.1:8000/api
+
+>Composer Link
+https://getcomposer.org/download/
+
+>Node Link
+https://nodejs.org/en/download
+
+>Total File Size
+PS C:\xampp\htdocs\Capstone\Ian> "{0:N2} MB" -f ((Get-ChildItem -Recurse | Measure-Object -Property Length -Sum).Sum / 1MB)
+120.41 MB

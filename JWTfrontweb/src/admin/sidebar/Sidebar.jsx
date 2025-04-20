@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './sidebar.css';
 import House_01 from '../../assets/icons/House_01.svg';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 import Calendar from '../../assets/icons/Calendar.svg';
@@ -14,13 +16,16 @@ import Book from '../../assets/icons/Book.svg?react';
 
 
 const Sidebar = () => {
+  const navigate = useNavigate()
+  const apiUrl = import.meta.env.VITE_API_BASE_URL;
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem('token');
+      console.log(import.meta.env.VITE_API_BASE_URL);
 
       if (!token) {
         console.warn('No token found, logging out anyway.');
-        navigate('/login');
+        navigate('/');
         return;
       }
 
@@ -32,46 +37,46 @@ const Sidebar = () => {
 
       localStorage.removeItem('token'); // Clear token
       localStorage.removeItem('user'); // Clear user data
-      navigate('/login');
+      navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      navigate('/login');
+      navigate('/');
     }
   };
   return (
   <div className="sidebar">
     <div className="sidebar-logo">
       
-      <Link to="/">
+   
         <button onClick={handleLogout}>
           <img src={concorde_logo} className="" alt="Search icon" />
         </button>
-      </Link>
+   
     </div> {/* sidebar-logo */}
 
     <div className="sidebar-buttons">
-      <Link to="/home">
+      <Link to="/admin/home">
         <button>
           <img src={House_01} className="" alt="home icon" />
         </button>
       </Link>
 
       
-      <Link to="/availability">
+      <Link to="/admin/availability">
         <button>
           <Users style={{ width: "32px", height: "32px", color: "#00889a", strokeWidth: 2 }} />
         </button>
       </Link>
       
-      <Link to="/calendar">
+      <Link to="/admin/calendar">
         <button>
           <img src={Calendar} className="" alt="calendar icon" />
         </button>
       </Link>
       
-      <Link to="/certificate">
+      <Link to="/admin/certificate">
       <button>
         <Notebook 
           style={{ 
@@ -84,7 +89,7 @@ const Sidebar = () => {
         </button>
       </Link>
 
-      <Link to="/schedule">
+      <Link to="/admin/schedule">
         <button>  
           <Book 
             style={{ 

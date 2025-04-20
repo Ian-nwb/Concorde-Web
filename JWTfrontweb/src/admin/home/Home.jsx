@@ -25,6 +25,8 @@ const Home = () => {
     const navigate = useNavigate(); 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
     
     useEffect(() => {
       const token = localStorage.getItem('token');
@@ -38,7 +40,7 @@ const Home = () => {
       if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
         if (parsedUser.role === 'user') {
-          navigate('/homeuser');
+          navigate('/user/homeuser');
           return;
         }
         if (parsedUser.role !== 'admin') {
@@ -61,7 +63,7 @@ const Home = () => {
         const userData = response.data;
     
         if (userData.role === 'user') {
-          navigate('/homeuser');
+          navigate('/user/homeuser');
           return;
         }
         if (userData.role !== 'admin') {
@@ -87,8 +89,8 @@ const Home = () => {
   
   return (
     <div className="home">
-    <Navbar />
-    <Sidebar />
+    {/* <Navbar /> i uncomment if user navbar is okay na
+    <Sidebar /> */}
     <div className="home-box">
       <main className="home-box-in">
         <div className="home-top">
@@ -339,7 +341,7 @@ const Home = () => {
           </header> {/* home-bot-header */}
 
           <div className="home-bot-cards">
-            <ScheduleCard />
+            <ScheduleCard user={user} />
             <ScheduleCard />
             <ScheduleCard />
 
