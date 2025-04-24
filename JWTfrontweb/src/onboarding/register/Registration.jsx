@@ -118,8 +118,10 @@ const Registration = () => {
           const filteredProvinces = response.data.filter(
             (province) => province.regionCode === selectedRegion
           );
+          console.log('Provinces API Response:', response.data); // Debug
+          console.log('Filtered Provinces:', filteredProvinces); // Debug
           setProvinces(filteredProvinces);
-          setSelectedProvince('');
+          setSelectedProvince(filteredProvinces[0]?.code || ''); // Set default province
           setCities([]);
           setBarangays([]);
         })
@@ -222,7 +224,7 @@ const Registration = () => {
       civil_status: formData.civil_status,
       birthday: formData.birthday,
     };
-
+    console.log('Registration Data:', registrationData);
     //token
     const token = localStorage.getItem('token');
 
@@ -426,7 +428,6 @@ const Registration = () => {
                         placeholder="Enter your zip code"
                         value={formData.zip_code}
                         onChange={handleChange}
-                        required
                       />
                     </div> {/* registration-container-column-form-address-content-right-alike */}
 
@@ -439,7 +440,6 @@ const Registration = () => {
                         placeholder="Enter your building number"
                         value={formData.building_number}
                         onChange={handleChange}
-                        required
                       />
                     </div> {/* registration-container-column-form-address-content-right-alike */}
                   </div> {/* registration-container-column-form-address-content-right */}
@@ -532,7 +532,7 @@ const Registration = () => {
                   name="register"
                   disabled={loading}
                 >
-                  {loading ? 'Registering...' : 'Register'}
+                
                 </button>
               </div> {/* registration-container-submit */}
             </form> {/* registration-container-column-form */}
