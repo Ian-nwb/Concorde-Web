@@ -7,6 +7,7 @@ import { Navbar } from '../../admin/navbar/Navbar';
 import Sidebar from '../../admin/sidebar/Sidebar';
 import Circle_Primary from '../../assets/icons/Circle_Primary.svg?react';
 import Clock from '../../assets/icons/Clock.svg?react';
+import BookAppointmentModal from '../../user/home/BookAppointmentModal';
 
 
 const HomeUser = () => {
@@ -16,9 +17,24 @@ const HomeUser = () => {
   const [loading, setLoading] = useState(true);
   const [statusLoading, setStatusLoading] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [appointmentDate, setAppointmentDate] = useState('');
+  const [appointmentStartTime, setAppointmentStartTime] = useState('');
+  const [appointmentEndTime, setAppointmentEndTime] = useState('');
+
 
   const statusOptions = ['On Board', 'Available', 'Vacation'];
 
+  useEffect(() => {
+    const storedAppointment = localStorage.getItem('appointment');
+    if (storedAppointment) {
+      const { date, startTime, endTime } = JSON.parse(storedAppointment);
+      setAppointmentDate(date);
+      setAppointmentStartTime(startTime);
+      setAppointmentEndTime(endTime);
+    }
+  }, []);
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
@@ -114,6 +130,26 @@ const HomeUser = () => {
     }
   };
 
+  const formatTime = (timeStr) => {
+    if (!timeStr) return '--:--';
+    const [hours, minutes] = timeStr.split(':');
+    const date = new Date();
+    date.setHours(parseInt(hours));
+    date.setMinutes(parseInt(minutes));
+    return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  };
+  
+  const handleAppointmentSave = () => {
+    const appointment = {
+      date: appointmentDate,
+      startTime: appointmentStartTime,
+      endTime: appointmentEndTime,
+    };
+    localStorage.setItem('appointment', JSON.stringify(appointment));
+    setIsModalOpen(false);
+  };
+  
+
   // const handlePdfUpload = async (e) => {
   //   const file = e.target.files[0];
   //   const formData = new FormData();
@@ -134,9 +170,10 @@ const HomeUser = () => {
     return null;
   }
 
+  
+
   return (
     <div className="homeUser">
-      
       <div className="homeUser-box">
         <main className="homeUser-box-in">
           <div className="homeUser-top">
@@ -146,6 +183,16 @@ const HomeUser = () => {
                 <header>Home</header>
                 </div> {/* homeUser-top-header-left */}
              
+                {isModalOpen && (
+                <BookAppointmentModal
+                onClose={() => setIsModalOpen(false)}
+                setAppointmentDate={setAppointmentDate}
+                setAppointmentStartTime={setAppointmentStartTime}
+                setAppointmentEndTime={setAppointmentEndTime}
+                />
+                )}
+
+
               <div className="homeUser-top-header-right">
                 <div className="homeUser-top-header-right-status">
                   <main className="homeUser-top-header-right-status-in">
@@ -187,60 +234,114 @@ const HomeUser = () => {
                   <Circle_Primary style={{ color: "var(--black-color-opacity-60)", width: "20px", height: "20px" }} />
                   </div> {/* homeUser-top-core-left-header */}
 
-                <div className="homeUser-top-core-left-heading">
-                  <p>You have an appointment</p>
-                  </div> {/* homeUser-top-core-left-heading */}
+                  <div className="homeUser-top-core-left-heading">
+                  {appointmentDate ? (
+                      <p style={{ fontWeight: '600', fontSize: '1.1rem' }}>You have an appointment</p>
+                   ) : (
+                      <p style={{ color: '#888', fontSize: '1.1rem' }}>No appointment scheduled</p>
+                    )}
+                  </div>
 
                 <div className="homeUser-top-core-left-date">
-                  <div className="homeUser-top-core-left-date-cal">
-                  {/* needs absolute positioning */}
-                    {/* <Circle_Primary style={{ color: "var(--black-color-opacity-60)", width: "20px", height: "20px" }} /> */}
-                <p className="homeUser-top-core-left-date-cal-regular">DEC</p>
-                <p className="homeUser-top-core-left-date-cal-semibold">28</p>
-                </div> {/* homeUser-top-core-left-date-cal */}
-                 
+                {appointmentDate ? (
+                <div className="homeUser-top-core-left-date-cal">
+                <p className="homeUser-top-core-left-date-cal-regular">
+                  {new Date(appointmentDate).toLocaleString('en-US', { month: 'short' }).toUpperCase()}
+                </p>
+                <p className="homeUser-top-core-left-date-cal-semibold">
+                  {new Date(appointmentDate).getDate()}
+                </p>
+                </div>
+                ) : (
+                <div className="homeUser-top-core-left-date-cal">
+                    <p className="homeUser-top-core-left-date-cal-regular">--- </p>
+                    <p className="homeUser-top-core-left-date-cal-semibold">--</p>
+                </div>
+                )}
+                
                   <div className="homeUser-top-core-left-date-data">
-                    <div className="homeUser-top-core-left-date-data-text">
-                      <p className="homeUser-top-core-left-date-data-text-regular">December 28, 2025</p>
-                      <p className="homeUser-top-core-left-date-data-text-light">Thursday</p>
-                    </div> {/* homeUser-top-core-left-date-data-text */}
-                   
-                    <div className="homeUser-top-core-left-date-data-cards">
-                    <div  className="homeUser-top-core-left-date-data-cards-start">
-                        <Clock style={{
-                            width: "24px",
-                            height: "24px",
-                            '--stroke-color': 'var(--black-color-opacity-30)',
-                            '--stroke-width': '5px'
-                          }} />
-                        <div className="homeUser-top-core-left-date-data-cards-start-text">
-                          <p className="homeUser-top-core-left-date-data-cards-start-text-light">Starts at</p>
-                          <p className="homeUser-top-core-left-date-data-cards-start-text-medium">11:30 AM</p>
-                          </div> {/* homeUser-top-core-left-date-data-cards-start-text */}
-                          </div> {/* homeUser-top-core-left-date-data-cards-start */}
-                         
-                          <div  className="homeUser-top-core-left-date-data-cards-end">
-                        <Clock style={{
-                            width: "24px",
-                            height: "24px",
-                            '--stroke-color': 'var(--black-color-opacity-30)',
-                            '--stroke-width': '5px'
-                          }} />
-                        <div className="homeUser-top-core-left-date-data-cards-end-text">
-                          <p className="homeUser-top-core-left-date-data-cards-end-text-light">Ends at</p>
-                          <p className="homeUser-top-core-left-date-data-cards-end-text-medium">12:00 PM</p>
-                          </div> {/* homeUser-top-core-left-date-data-cards-end-text */}
-                  </div> {/* homeUser-top-core-left-date-data-cards-end */}
-                </div> {/* homeUser-top-core-left-date-data-cards */}
-              </div> {/* homeUser-top-core-left-date-data */}
+                  {appointmentDate ? (
+        <>
+        <div className="homeUser-top-core-left-date-data-text">
+          <p className="homeUser-top-core-left-date-data-text-regular">{appointmentDate}</p>
+          <p className="homeUser-top-core-left-date-data-text-light">
+            {new Date(appointmentDate).toLocaleDateString('en-US', { weekday: 'long' })}
+          </p>
+        </div>
+
+        <div className="homeUser-top-core-left-date-data-cards">
+        <div className="homeUser-top-core-left-date-data-cards-start">
+          <Clock style={{
+          width: "24px",
+          height: "24px",
+          '--stroke-color': 'var(--black-color-opacity-30)',
+          '--stroke-width': '5px'
+        }} />
+        <div className="homeUser-top-core-left-date-data-cards-start-text">
+          <p className="homeUser-top-core-left-date-data-cards-start-text-light">Starts at</p>
+          <p className="homeUser-top-core-left-date-data-cards-start-text-medium">
+             {formatTime(appointmentStartTime)}
+          </p>
+
+        </div>
+      </div>
+
+      <div className="homeUser-top-core-left-date-data-cards-end">
+        <Clock style={{
+          width: "24px",
+          height: "24px",
+          '--stroke-color': 'var(--black-color-opacity-30)',
+          '--stroke-width': '5px'
+        }} />
+        <div className="homeUser-top-core-left-date-data-cards-end-text">
+          <p className="homeUser-top-core-left-date-data-cards-end-text-light">Ends at</p>
+          <p className="homeUser-top-core-left-date-data-cards-end-text-medium">
+            {formatTime(appointmentEndTime)}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <button
+      onClick={() => {
+        localStorage.removeItem('appointment');
+        setAppointmentDate('');
+        setAppointmentStartTime('');
+        setAppointmentEndTime('');
+      }}
+      style={{
+        marginTop: '1rem',
+        padding: '8px 12px',
+        background: '#f44336',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+      }}
+    >
+      Delete Appointment
+    </button>
+
+  </>
+      ) : (
+      <p style={{ padding: '1rem', fontStyle: 'italic' }}>
+          You have no scheduled appointment yet.
+      </p>
+      )}
+
+            </div> {/* homeUser-top-core-left-date-data */}
             </div> {/* homeUser-top-core-left-date */}
             
             <div className="homeUser-top-core-left-btn">
-            <button className="homeUser-top-core-left-btn-button">
-                  <Circle_Primary style={{ color: "var(--black-color-opacity-60)", width: "20px", height: "20px" }} />
-                  <p>Set appointment</p>
-                </button>
-                </div> {/* homeUser-top-core-left-btn */}
+  <button
+    className="homeUser-top-core-left-btn-button"
+    onClick={() => setIsModalOpen(true)}
+  >
+    <Circle_Primary style={{ color: "var(--black-color-opacity-60)", width: "20px", height: "20px" }} />
+    <p>Set appointment</p>
+  </button>
+</div>
+
                 </div> {/* homeUser-top-core-left */}
              
               <div className="homeUser-top-core-right">

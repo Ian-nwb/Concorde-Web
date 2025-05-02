@@ -113,8 +113,8 @@
       .homeUser-top-core-left-heading {
 				 /* background-color: palegreen;  */
 				font-weight: var(--font-weight-bold);
-        font-size: var(--font-size-20);
-        color: var(--black-color);
+        		font-size: var(--font-size-20);
+        		color: var(--black-color);
 			} 
       .homeUser-top-core-left-date { 
 				/* background-color: lightgreen;  */
