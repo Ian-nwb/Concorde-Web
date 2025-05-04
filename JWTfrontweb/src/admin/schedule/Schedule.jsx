@@ -18,6 +18,9 @@ const Schedule = () => {
 	  const navigate = useNavigate(); 
 	  const [user, setUser] = useState(null);
 	  const [loading, setLoading] = useState(true);
+	  const [appointments, setAppointments] = useState([]);
+	const [filter, setFilter] = useState('all');
+
 	  
 	  useEffect(() => {
 		const token = localStorage.getItem('token');
@@ -72,11 +75,29 @@ const Schedule = () => {
 		}
 	  };
 	  
+	  const getFilteredAppointments = () => {
+		const today = new Date().toDateString();
+	  
+		switch (filter) {
+		  case 'today':
+			return appointments.filter(appt => new Date(appt.date).toDateString() === today);
+		  case 'upcoming':
+			return appointments.filter(appt => appt.status === 'upcoming' && new Date(appt.date) > new Date());
+		  case 'completed':
+			return appointments.filter(appt => appt.status === 'completed');
+		  default:
+			return appointments;
+		}
+	  };
+	  
 //BLOCK TO
 	  if (loading) {
 		return null; 
 	  }
 	   
+	  console.log('Current Filter:', filter);
+		console.log('Filtered Appointments:', getFilteredAppointments());
+
   return (
   	<div className="schedule">
 		<Navbar />
@@ -96,49 +117,39 @@ const Schedule = () => {
 					<p>Scheduled appointments</p> 
 				</header> {/* schedule-header */}
 				<section className="schedule-tabs">
-					<button className="schedule-tabs-all">
-						<Circle_Primary style={{ color: "var(--white-color)", width: "20px", height: "20px" }} />
-						<p>All</p>
-					</button> {/* schedule-tabs-all */}
+				<button className="schedule-tabs-all" onClick={() => setFilter('all')}>
+  					<Circle_Primary style={{ color: "var(--primary-color)", width: "20px", height: "20px" }} />
+  					<p>All</p>
+				</button>
 
-					<button className="schedule-tabs-today">
-						<Circle_Primary style={{ color: "var(--primary-color)", width: "20px", height: "20px" }} />
-						<p>Today</p>
-					</button> {/* schedule-tabs-today */}
+				<button className="schedule-tabs-today" onClick={() => setFilter('today')}>
+  					<Circle_Primary style={{ color: "var(--primary-color)", width: "20px", height: "20px" }} />
+  					<p>Today</p>
+				</button>
 
-					<button className="schedule-tabs-upcoming">
-						<Circle_Primary style={{ color: "var(--primary-color)", width: "20px", height: "20px" }} />
-						<p>Upcoming</p>
-					</button> {/* schedule-tabs-upcoming */}
+				<button className="schedule-tabs-upcoming" onClick={() => setFilter('upcoming')}>
+  					<Circle_Primary style={{ color: "var(--primary-color)", width: "20px", height: "20px" }} />
+  					<p>Upcoming</p>
+				</button>
 
-					<button className="schedule-tabs-completed">
-						<Circle_Primary style={{ color: "var(--primary-color)", width: "20px", height: "20px" }} />
-						<p>Completed</p>
-					</button> {/* schedule-tabs-completed */}
+				<button className="schedule-tabs-completed" onClick={() => setFilter('completed')}>
+  					<Circle_Primary style={{ color: "var(--primary-color)", width: "20px", height: "20px" }}  />
+  					<p>Completed</p>
+				</button>
 				</section> {/* schedule-tabs */}
 
 				<header className="schedule-header-today">
 					<p>Today</p>
 				</header> {/* schedule-header-today */}
 
-				<section className="schedule-today">
-					<div className="schedule-today-cards">
-						<ScheduleCard />
-						<ScheduleCard />
-						<ScheduleCard />
-						
-					</div> {/* schedule-today-cards */}
-				</section> {/* schedule-today */}
+				<section className="schedule-results">
+  					<div className="schedule-results-cards">
+    				{getFilteredAppointments().map((appt) => (
+      				<ScheduleCard key={appt.id} appointment={appt} />
+    			))}
+  				</div>
+				</section>
 
-				<header className="schedule-header-completed">
-					<p>Completed</p>
-				</header> {/* schedule-header-completed */}
-
-				<section className="schedule-completed">
-					<div className="schedule-completed-cards">
-						<ScheduleCard />
-					</div> {/* schedule-completed-cards */}
-				</section> {/* schedule-completed */}
 			</main> {/* schedule-box-in */}
     </div> {/* schedule-box */}
   	</div>
